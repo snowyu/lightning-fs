@@ -37,7 +37,7 @@
     "karma-webpack": "4.0.2",
     "pouchdb-adapter-idb": "^7.2.1",
     "pouchdb-core": "^7.2.1",
-    "pouchdb-ex": "^1.0.1",
+    "pouchdb-ex": "^1.0.3",
     "pouchdb-upsertex": "^0.1.0",
     "prettier": "^1.15.3",
     "puppeteer": "^1.10.0",
