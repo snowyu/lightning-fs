@@ -1,9 +1,11 @@
 import Store from "./pouchdb-keyval";
 import { apiError, ErrorCode } from './pouchdb-api-error';
+import { fromMap } from './fromMap';
+import { toMap } from './toMap';
 
 
 function convertError(e, p, message = e.toString()) {
-  console.log('TCL::: function convertError -> e', e);
+  // console.log('TCL::: function convertError -> e', e, p);
   const ErrorCodeMap = {
     404: 'ENOENT',
     403: 'EACCES',
@@ -34,10 +36,15 @@ export default class PouchBackend {
     this._store = new Store(name, options);
   }
   saveSuperblock(superblock) {
+    if (superblock instanceof Map) {
+      superblock = fromMap(superblock)
+    }
     return this._store.set("!root", superblock).catch(e => {throw convertError(e, 'set!root')});
   }
-  loadSuperblock() {
-    return this._store.get("!root").catch(e => {convertError(e, 'get!root')});
+  async loadSuperblock() {
+    let result = await this._store.get("!root").catch(e => {convertError(e, 'get!root')});
+    if (result && Object.keys(result).length) result = toMap(result); else result = undefined;
+    return result;
   }
   readFile(inode) {
     // console.log('TCL::: PouchBackend -> readFile -> inode', inode);
